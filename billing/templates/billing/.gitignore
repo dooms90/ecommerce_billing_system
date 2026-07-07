@@ -1,0 +1,13 @@
+@"
+   venv/
+   Scripts/
+   Lib/
+   Include/
+   pyvenv.cfg
+   __pycache__/
+   *.pyc
+   db.sqlite3
+   media/
+   *.log
+   .env
+   "@ | Out-File -Encoding utf8 .gitignore

@@ -1,0 +1,26 @@
+{% extends 'billing/base.html' %}
+
+{% block content %}
+<div style="background:white; padding:25px; border-radius:8px; max-width:400px; margin:auto; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <h2>Login</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color:red;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <label>Username</label><br>
+        <input type="text" name="username" required style="width:100%; padding:8px; margin:6px 0;"><br>
+
+        <label>Password</label><br>
+        <input type="password" name="password" required style="width:100%; padding:8px; margin:6px 0;"><br>
+
+        <button type="submit" class="btn" style="border:none; cursor:pointer; margin-top:10px;">Login</button>
+    </form>
+
+    <p style="margin-top:10px;">Don't have an account? <a href="{% url 'signup' %}">Sign up here</a></p>
+</div>
+{% endblock %}

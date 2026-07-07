@@ -1,0 +1,36 @@
+{% extends 'billing/base.html' %}
+
+{% block content %}
+<h2>My Orders</h2>
+
+{% if orders %}
+<table style="width:100%; border-collapse: collapse; background:white; border-radius:8px; overflow:hidden;">
+    <tr style="background:#1a1a2e; color:white;">
+        <th style="padding:10px; text-align:left;">Order ID</th>
+        <th style="padding:10px;">Date</th>
+        <th style="padding:10px;">Status</th>
+        <th style="padding:10px;">Total</th>
+        <th style="padding:10px;">Invoice</th>
+    </tr>
+    {% for order in orders %}
+    <tr style="border-bottom:1px solid #eee;">
+        <td style="padding:10px;">#{{ order.id }}</td>
+        <td style="padding:10px; text-align:center;">{{ order.created_at|date:"d M Y, H:i" }}</td>
+        <td style="padding:10px; text-align:center;">{{ order.status|title }}</td>
+        <td style="padding:10px; text-align:center;">₹{{ order.total_amount }}</td>
+        <td style="padding:10px; text-align:center;">
+            {% if order.invoice %}
+                <a href="{% url 'invoice_view' order.invoice.id %}">View</a>
+            {% else %}
+                —
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>You haven't placed any orders yet.</p>
+{% endif %}
+
+<p style="margin-top:20px;"><a href="{% url 'home' %}">&larr; Continue shopping</a></p>
+{% endblock %}

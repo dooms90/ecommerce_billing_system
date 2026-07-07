@@ -1,0 +1,84 @@
+{% extends 'billing/base.html' %}
+
+{% block content %}
+<h2>Sales Dashboard</h2>
+
+<form method="get" style="background:white; padding:15px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap; align-items:end;">
+    <div>
+        <label style="display:block; font-size:12px; color:#777;">Quick Filter</label>
+        <select name="quick_filter" style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+      <option value="">-- Custom Range --</option>
+      <option value="this_week" {% if quick_filter == "this_week" %}selected{% endif %}>This Week</option>
+      <option value="this_month" {% if quick_filter == "this_month" %}selected{% endif %}>This Month</option>
+            <option value="last_month" {% if quick_filter == "last_month" %}selected{% endif %}>Last Month</option>
+            <option value="this_year" {% if quick_filter == "this_year" %}selected{% endif %}>This Year</option>
+        </select>
+    </div>
+
+    <div>
+        <label style="display:block; font-size:12px; color:#777;">From Date</label>
+        <input type="date" name="start_date" value="{{ start_date }}" style="padding:7px; border:1px solid #ccc; border-radius:5px;">
+    </div>
+
+    <div>
+        <label style="display:block; font-size:12px; color:#777;">To Date</label>
+        <input type="date" name="end_date" value="{{ end_date }}" style="padding:7px; border:1px solid #ccc; border-radius:5px;">
+    </div>
+
+    <button type="submit" class="btn" style="border:none; cursor:pointer; padding:9px 16px;">Apply Filter</button>
+    <a href="{% url 'sales_dashboard' %}" class="btn" style="background:#777; padding:9px 16px;">Reset</a>
+</form>
+
+<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:20px; margin:20px 0;">
+    <div style="background:white; padding:20px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); text-align:center;">
+        <p style="color:#777;">Total Orders</p>
+        <h2>{{ total_orders }}</h2>
+    </div>
+    <div style="background:white; padding:20px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); text-align:center;">
+        <p style="color:#777;">Total Revenue</p>
+        <h2 style="color:#0f9d58;">₹{{ total_revenue }}</h2>
+    </div>
+    <div style="background:white; padding:20px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); text-align:center;">
+        <p style="color:#777;">Tax Collected</p>
+        <h2>₹{{ total_tax_collected }}</h2>
+    </div>
+</div>
+
+<h3 style="margin-top:30px;">Top Selling Products</h3>
+<table style="width:100%; border-collapse: collapse; background:white; border-radius:8px; overflow:hidden; margin-top:10px;">
+    <tr style="background:#1a1a2e; color:white;">
+        <th style="padding:10px; text-align:left;">Product</th>
+        <th style="padding:10px;">Units Sold</th>
+        <th style="padding:10px;">Revenue</th>
+    </tr>
+    {% for item in top_products %}
+    <tr style="border-bottom:1px solid #eee;">
+        <td style="padding:10px;">{{ item.product__name }}</td>
+        <td style="padding:10px; text-align:center;">{{ item.total_sold }}</td>
+        <td style="padding:10px; text-align:center;">₹{{ item.revenue }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3" style="padding:10px;">No sales yet.</td></tr>
+    {% endfor %}
+</table>
+
+<h3 style="margin-top:30px;">All Recent Orders</h3>
+<table style="width:100%; border-collapse: collapse; background:white; border-radius:8px; overflow:hidden; margin-top:10px;">
+    <tr style="background:#1a1a2e; color:white;">
+        <th style="padding:10px; text-align:left;">Order ID</th>
+        <th style="padding:10px;">Customer</th>
+        <th style="padding:10px;">Date</th>
+        <th style="padding:10px;">Total</th>
+    </tr>
+    {% for order in recent_orders %}
+    <tr style="border-bottom:1px solid #eee;">
+        <td style="padding:10px;">#{{ order.id }}</td>
+        <td style="padding:10px; text-align:center;">{{ order.customer.user.username }}</td>
+        <td style="padding:10px; text-align:center;">{{ order.created_at|date:"d M Y, H:i" }}</td>
+        <td style="padding:10px; text-align:center;">₹{{ order.total_amount }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4" style="padding:10px;">No orders yet.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

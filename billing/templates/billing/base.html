@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}E-commerce Billing System{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'billing/css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>🛒 MyShop</h1>
+       <nav>
+<a href="{% url 'view_cart' %}" style="color:white; margin-right:15px;">
+    Cart
+    {% if cart_item_count > 0 %}
+        <span style="background:#e63946; color:white; border-radius:50%; padding:2px 7px; font-size:12px; margin-left:4px;">{{ cart_item_count }}</span>
+    {% endif %}
+</a>
+    {% if user.is_authenticated %}
+Hi, {{ user.username }} |
+{% if user.is_staff %}
+<a href="{% url 'sales_dashboard' %}" style="color:white; margin:0 10px;">Dashboard</a> |
+{% endif %}
+<a href="{% url 'order_history' %}" style="color:white; margin:0 10px;">My Orders</a> |
+        <a href="{% url 'logout' %}" style="color:white;">Logout</a>
+    {% else %}
+        <a href="{% url 'login' %}" style="color:white;">Login</a> |
+        <a href="{% url 'signup' %}" style="color:white;">Signup</a>
+    {% endif %}
+</nav>
+    </header>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

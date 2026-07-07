@@ -1,0 +1,41 @@
+<html>
+<head>
+<style>
+    body { font-family: Arial, sans-serif; font-size: 13px; color: #222; }
+    h1 { color: #1a1a2e; font-size: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th { background: #1a1a2e; color: white; padding: 8px; text-align: left; }
+    td { padding: 8px; border-bottom: 1px solid #eee; }
+    .totals { text-align: right; margin-top: 15px; }
+</style>
+</head>
+<body>
+    <h1>Invoice</h1>
+    <p><strong>Invoice No:</strong> {{ invoice.invoice_number }}</p>
+    <p><strong>Date:</strong> {{ invoice.generated_at }}</p>
+    <p><strong>Customer:</strong> {{ order.customer.user.username }}</p>
+
+    <table>
+        <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>Rs. {{ item.price_at_purchase }}</td>
+            <td>Rs. {{ item.subtotal }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="totals">
+        <p>Total Tax: Rs. {{ invoice.tax_amount }}</p>
+        <p>Shipping: Rs. {{ invoice.shipping_charge }}</p>
+        <h3>Grand Total: Rs. {{ invoice.grand_total }}</h3>
+    </div>
+</body>
+</html>

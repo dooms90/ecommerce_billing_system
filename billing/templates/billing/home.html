@@ -1,0 +1,90 @@
+{% extends 'billing/base.html' %}
+{% load static %}
+
+{% block content %}
+<h2>Our Products</h2>
+
+<form method="get" style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+    <div style="position:relative; flex:1; min-width:200px;">
+    <input type="text" id="live-search-input" name="q" placeholder="Search products..." value="{{ query }}" autocomplete="off" style="padding:8px; width:100%; border:1px solid #ccc; border-radius:5px; box-sizing:border-box;">
+    <div id="live-search-results" style="display:none; position:absolute; top:42px; left:0; right:0; background:white; border:1px solid #ddd; border-radius:5px; box-shadow:0 4px 10px rgba(0,0,0,0.1); z-index:10; max-height:300px; overflow-y:auto;"></div>
+</div>
+
+    <select name="category" style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit" class="btn" style="border:none; cursor:pointer;">Search</button>
+    <a href="{% url 'home' %}" class="btn" style="background:#777;">Clear</a>
+</form>
+<div class="product-grid">
+    {% for product in products %}
+        <div class="product-card">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+                <img src="https://via.placeholder.com/220x160?text=No+Image" alt="No image">
+            {% endif %}
+            <h3>{{ product.name }}</h3>
+            <p class="price">₹{{ product.price }}</p>
+            {%if user.is_staff %}
+                <p class="stock">Stock: {{ product.stock }}</p>
+            {% endif %}
+            <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
+        </div>
+    {% empty %}
+        <p>No products available yet.</p>
+    {% endfor %}
+</div>
+
+<script>
+const searchInput = document.getElementById('live-search-input');
+const resultsBox = document.getElementById('live-search-results');
+let debounceTimer;
+
+searchInput.addEventListener('input', function () {
+    clearTimeout(debounceTimer);
+    const query = this.value.trim();
+
+    if (query.length === 0) {
+        resultsBox.style.display = 'none';
+        resultsBox.innerHTML = '';
+        return;
+    }
+
+    debounceTimer = setTimeout(() => {
+        fetch(`/search-ajax/?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                resultsBox.innerHTML = '';
+
+                if (data.results.length === 0) {
+                    resultsBox.innerHTML = '<div style="padding:10px; color:#777;">No products found.</div>';
+                } else {
+                    data.results.forEach(product => {
+                        const item = document.createElement('a');
+                        item.href = product.url;
+                        item.style = 'display:block; padding:10px; border-bottom:1px solid #eee; text-decoration:none; color:#222;';
+                        item.innerHTML = `<strong>${product.name}</strong> — ₹${product.price} <span style="color:#777; font-size:12px;">(Stock: ${product.stock})</span>`;
+                        item.addEventListener('mouseenter', () => item.style.background = '#f4f6f8');
+                        item.addEventListener('mouseleave', () => item.style.background = 'white');
+                        resultsBox.appendChild(item);
+                    });
+                }
+
+                resultsBox.style.display = 'block';
+            });
+    }, 300);
+});
+
+document.addEventListener('click', function (e) {
+    if (!resultsBox.contains(e.target) && e.target !== searchInput) {
+        resultsBox.style.display = 'none';
+    }
+});
+</script>
+{% endblock %}
+

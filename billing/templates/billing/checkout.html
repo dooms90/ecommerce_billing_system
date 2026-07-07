@@ -1,0 +1,103 @@
+{% extends 'billing/base.html' %}
+
+{% block content %}
+<h2>Checkout</h2>
+
+<div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:20px;">
+
+    <div style="flex:2; min-width:280px;">
+        <div style="background:white; padding:20px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+            <h3>Order Summary</h3>
+            {% for item in cart_items %}
+                <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee;">
+                    <span>{{ item.product.name }} × {{ item.quantity }}</span>
+                    <span>₹{{ item.subtotal }}</span>
+                </div>
+            {% endfor %}
+
+            <div style="margin-top:15px;">
+                <h4>Coupon Code</h4>
+                {% if coupon_error %}
+                    <p style="color:red; font-size:13px;">{{ coupon_error }}</p>
+                {% endif %}
+
+                {% if coupon_code %}
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:#eaffea; padding:10px; border-radius:5px;">
+                        <span>✅ Coupon "{{ coupon_code }}" applied</span>
+                        <a href="{% url 'remove_coupon' %}" style="color:red; font-size:13px;">Remove</a>
+                    </div>
+                {% else %}
+                    <form method="post" action="{% url 'apply_coupon' %}" style="display:flex; gap:8px;">
+                        {% csrf_token %}
+                        <input type="text" name="coupon_code" placeholder="Enter coupon code" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:5px;">
+                        <button type="submit" class="btn" style="border:none; cursor:pointer;">Apply</button>
+                    </form>
+                {% endif %}
+            </div>
+
+            <div style="margin-top:15px; padding-top:10px; border-top:1px solid #eee;">
+                <div style="display:flex; justify-content:space-between;">
+                    <span>Subtotal</span>
+                    <span>₹{{ subtotal_total }}</span>
+                </div>
+                {% if discount_amount > 0 %}
+                <div style="display:flex; justify-content:space-between; color:#0f9d58;">
+                    <span>Discount</span>
+                    <span>-₹{{ discount_amount }}</span>
+                </div>
+                {% endif %}
+                <div style="display:flex; justify-content:space-between; font-weight:bold; margin-top:8px;">
+                    <span>Total (before tax)</span>
+                    <span>₹{{ grand_total }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="flex:1; min-width:280px;">
+        <div style="background:white; padding:20px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+            <h3>Select Payment Method</h3>
+          <h3>Billing & Shipping Address</h3>
+<form method="post" id="checkout-form">
+    {% csrf_token %}
+
+    <label style="display:block; font-size:13px; margin-top:10px;">Billing Address</label>
+    <textarea name="billing_address" required rows="3" placeholder="House no, street, city, state, PIN" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:5px; box-sizing:border-box;"></textarea>
+
+    <label style="display:flex; align-items:center; gap:6px; margin-top:10px; font-size:14px;">
+        <input type="checkbox" name="same_as_billing" id="same_as_billing" checked>
+        Shipping address same as billing
+    </label>
+
+    <div id="shipping-field" style="display:none; margin-top:8px;">
+        <label style="display:block; font-size:13px;">Shipping Address</label>
+        <textarea name="shipping_address" rows="3" placeholder="House no, street, city, state, PIN" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:5px; box-sizing:border-box;"></textarea>
+    </div>
+
+    <h3 style="margin-top:20px;">Select Payment Method</h3>
+
+    <label style="display:block; padding:10px; border:1px solid #ddd; border-radius:5px; margin:8px 0; cursor:pointer;">
+        <input type="radio" name="payment_method" value="cod" checked> Cash on Delivery
+    </label>
+
+                <label style="display:block; padding:10px; border:1px solid #ddd; border-radius:5px; margin:8px 0; cursor:pointer;">
+                    <input type="radio" name="payment_method" value="card"> Credit/Debit Card
+                </label>
+
+                <label style="display:block; padding:10px; border:1px solid #ddd; border-radius:5px; margin:8px 0; cursor:pointer;">
+        <input type="radio" name="payment_method" value="upi"> UPI
+    </label>
+
+    <button type="submit" class="btn" style="width:100%; border:none; cursor:pointer; margin-top:15px; padding:12px;">Place Order</button>
+</form>
+
+<script>
+document.getElementById('same_as_billing').addEventListener('change', function() {
+    document.getElementById('shipping-field').style.display = this.checked ? 'none' : 'block';
+});
+</script>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
