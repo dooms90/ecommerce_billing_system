@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME':'ecommerce_billing',
         'USER':'root',
-        'PASSWORD':'chuja9079',
+        'PASSWORD':'pssword',
         'HOST':'localhost',
         'PORT':'3306'
     }
