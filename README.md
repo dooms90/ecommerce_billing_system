@@ -25,4 +25,13 @@ Admin-facing
 📅 Date-range filters on the dashboard (This Week / This Month / Last Month / This Year / custom range)
 📈 Stock visibility restricted to staff/superuser accounts
 
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|--------|------------|
+| Backend | Python, Django |
+| Database | MySQL |
+| Frontend | HTML5, CSS3, JavaScript (AJAX) |
+| PDF Generation | xhtml2pdf |
+| Image Handling | Pillow |
 
