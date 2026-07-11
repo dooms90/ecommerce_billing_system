@@ -38,20 +38,25 @@ A full-stack e-commerce and billing web application built with Django and MySQL.
 | Image Handling | Pillow |
 
 📁 Project Structure
+## 📁 Project Structure
 
+```text
 ecommerce_billing_system/
 ├── billing/
-│   ├── models.py           # Category, Product, Customer, Order, OrderItem, Invoice, Coupon
-│   ├── views.py             # All business logic (cart, checkout, invoice, dashboard...)
+│   ├── models.py              # Category, Product, Customer, Order, OrderItem, Invoice, Coupon
+│   ├── views.py               # Business logic (cart, checkout, invoice, dashboard)
 │   ├── urls.py
 │   ├── admin.py
 │   ├── context_processors.py
-│   ├── templates/billing/   # All HTML templates
-│   └── static/billing/      # CSS, JS
+│   ├── templates/
+│   │   └── billing/           # HTML templates
+│   └── static/
+│       └── billing/           # CSS, JavaScript, Images
 ├── Ecommerce_billing_system/
 │   ├── settings.py
 │   └── urls.py
 ├── manage.py
 ├── requirements.txt
-├── .env                  
-└── .gitignore
+├── .env                      
+└── .gitignore            
+```
