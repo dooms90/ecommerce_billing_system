@@ -60,7 +60,7 @@ ecommerce_billing_system/
 ├── .env                      
 └── .gitignore            
 ```
-Demo link 
+Demo link :
 http://127.0.0.1:8000/
 <br>
 http://127.0.0.1:8000/admin
