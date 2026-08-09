@@ -4,7 +4,7 @@ A full-stack e-commerce and billing web application built with Django and MySQL.
 
 ## ✨ Features
 
-### 👤 Customer-facing Features
+### Customer-facing Features
 
 - 🔐 Signup, Login & Logout (Django Authentication)
 - 🔍 Live AJAX Product Search
