@@ -26,7 +26,7 @@ A full-stack e-commerce and billing web application built with Django and MySQL.
 - Sales dashboard — total orders, revenue, tax collected, top-selling products
 - Date-range filters on the dashboard (This Week / This Month / Last Month / This Year / custom range)
 - Stock visibility restricted to staff/superuser accounts
-
+- 
 ## 🛠️Tech Stack
 
 | Layer | Technology |
