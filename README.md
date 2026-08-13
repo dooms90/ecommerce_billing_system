@@ -37,7 +37,7 @@ A full-stack e-commerce and billing web application built with Django and MySQL.
 | PDF Generation | xhtml2pdf |
 | Image Handling | Pillow |
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 ecommerce_billing_system/
